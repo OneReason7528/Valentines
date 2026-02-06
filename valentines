@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Be My Valentine?</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #ffd6e8;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      width: 320px;
+    }
+
+    /* We use this class to hide elements */
+    .hidden {
+      display: none;
+    }
+
+    h1 { color: #ff4d6d; }
+    img { width: 200px; margin: 15px 0; border-radius: 10px; }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yesBtn { background-color: #ff4d6d; color: white; }
+    #noBtn { background-color: #999; color: white; position: absolute; }
+    
+    .backBtn {
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="main-content" class="container">
+    <h1>Will you be my Valentine? 💖</h1>
+    <img src="https://gifdb.com/images/high/beating-heart-cute-bunny-hug-3n93ptp7obb6tatv.gif" alt="cute bunny">
+    <br>
+    <button id="yesBtn" onclick="showSuccess()">Yes 💕</button>
+    <button id="noBtn" onmouseover="moveno()">No 😢</button>
+  </div>
+
+  <div id="success-content" class="container hidden">
+    <h1>Knew you would say yes! 💘</h1>
+    <img src="https://media.tenor.com/tXypRriFDUkAAAAm/cute-bunny-rabbit.webp" alt="happy bunny">
+    <br>
+    <button class="backBtn" onclick="goBack()">Go Back ←</button>
+  </div>
+
+  <script>
+    const mainContent = document.getElementById('main-content');
+    const successContent = document.getElementById('success-content');
+    const noBtn = document.getElementById("noBtn");
+
+    function showSuccess() {
+      mainContent.classList.add('hidden');
+      successContent.classList.remove('hidden');
+    }
+
+    function goBack() {
+      successContent.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+      
+      // Optional: Reset the "No" button position so it isn't stuck somewhere weird
+      noBtn.style.position = "static"; 
+      setTimeout(() => { noBtn.style.position = "absolute"; }, 10);
+    }
+
+    function moveno() {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+  </script>
+
+</body>
+</html>
