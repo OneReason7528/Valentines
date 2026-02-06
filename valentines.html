@@ -6,7 +6,6 @@
   <title>Valentine Booklet</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* BASE STYLES */
     body {
       display: flex;
       justify-content: center;
@@ -17,8 +16,8 @@
       background-size: 400% 400%;
       animation: gradientBG 8s ease infinite;
       font-family: 'Georgia', serif;
-      overflow-x: hidden; /* Prevent side-scroll on mobile */
-      touch-action: manipulation; /* Optimizes for mobile tapping */
+      overflow: hidden;
+      touch-action: manipulation;
     }
 
     @keyframes gradientBG {
@@ -28,38 +27,15 @@
     }
 
     .booklet {
-      width: 90vw; /* Use viewport width for mobile */
+      width: 90vw;
       max-width: 350px;
-      height: 520px;
+      height: 500px;
       position: relative;
       background: white;
       border-radius: 15px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      transition: all 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
       display: flex;
       perspective: 1500px;
-    }
-
-    /* DESKTOP OPEN STATE */
-    @media (min-width: 768px) {
-      .booklet.open {
-        width: 700px;
-        max-width: none;
-      }
-    }
-
-    /* SPINE EFFECT */
-    .booklet::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 12px;
-      height: 100%;
-      background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
-      z-index: 101;
-      pointer-events: none;
-      border-radius: 15px 0 0 15px;
     }
 
     .page-half {
@@ -72,26 +48,17 @@
       padding: 20px;
       box-sizing: border-box;
       background: #fff;
-      overflow: hidden;
       border-radius: 15px;
     }
 
-    /* MOBILE ADJUSTMENT: Hide left page initially when open on small screens */
+    /* Mobile: stack pages or hide left one when open */
     @media (max-width: 767px) {
-      .booklet.open .page-half:first-child {
-        display: none;
-      }
-      .booklet.open {
-        height: 550px;
-      }
+      .booklet.open .page-half:first-child { display: none; }
     }
 
     .cover-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: #ff4d6d;
       background-image: radial-gradient(circle at 30% 30%, #ff6b87 0%, #ff4d6d 100%);
       color: white;
@@ -104,18 +71,11 @@
       transition: transform 0.8s ease, opacity 0.4s ease;
       transform-origin: left;
       border-radius: 15px;
-      backface-visibility: hidden;
       border: 6px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
     }
 
-    .booklet.open .cover-overlay {
-      transform: rotateY(-180deg);
-      opacity: 0;
-      pointer-events: none;
-    }
+    .booklet.open .cover-overlay { transform: rotateY(-180deg); opacity: 0; pointer-events: none; }
 
-    /* CONTENT STYLING */
     #rightPageContent {
       opacity: 0;
       pointer-events: none;
@@ -129,17 +89,15 @@
 
     .booklet.open #rightPageContent { opacity: 1; pointer-events: auto; }
 
-    h1 { font-size: 1.4rem; color: #ff4d6d; text-align: center; margin: 10px 0; }
-    img { width: 140px; max-width: 80%; border-radius: 12px; margin: 10px 0; }
-    
-    /* BUTTONS - Optimized for Thumbs */
+    h1 { font-size: 1.3rem; color: #ff4d6d; text-align: center; margin: 10px 0; }
+    img { width: 140px; border-radius: 12px; margin: 10px 0; }
+
+    /* BUTTONS - Spaced out for mobile */
     button {
-      padding: 15px 25px; /* Larger hit area for fingers */
+      padding: 12px 20px;
       font-size: 16px;
       border: none;
       border-radius: 50px;
-      cursor: pointer;
-      font-family: sans-serif;
       font-weight: bold;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
@@ -148,76 +106,62 @@
       background: #ff4d6d;
       color: white;
       position: absolute;
-      bottom: 25px;
-      left: 20px;
-      z-index: 200;
+      bottom: 20px;
+      left: 20px; /* Locked to bottom left */
+      z-index: 100;
     }
 
     #noBtn {
       background: #fdfdfd;
       color: #999;
       position: absolute;
-      bottom: 25px;
-      right: 20px;
-      z-index: 200;
-      transition: all 0.15s ease;
+      bottom: 20px;
+      right: 20px; /* Starts at bottom right */
+      z-index: 100;
+      transition: all 0.2s ease;
     }
 
     #replyBox {
-      width: 95%;
-      padding: 12px;
+      width: 90%;
+      padding: 10px;
       border: 2px solid #ffd6e8;
-      border-radius: 12px;
-      font-size: 16px; /* Prevents iOS/Android auto-zoom on focus */
-      margin-top: 10px;
-      resize: none;
-    }
-
-    .send-reply-btn {
-      background: #ff4d6d;
-      color: white;
-      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
       margin-top: 10px;
     }
 
+    .send-reply-btn { background: #ff4d6d; color: white; width: 90%; margin-top: 10px; }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
   <div class="booklet" id="booklet">
-    
     <div class="cover-overlay" onclick="openBook()">
-      <h1 style="color: white; font-size: 2rem;">For You</h1>
-      <div style="font-size: 60px; margin: 15px 0;">💌</div>
+      <h1 style="color: white;">For You</h1>
+      <div style="font-size: 50px;">💌</div>
       <p>Tap to open</p>
     </div>
 
-    <div class="page-half" style="border-right: 1px solid #f0f0f0;">
-      <h2 style="color: #ff4d6d; margin-top: 30px;">Hi there,</h2>
-      <p style="color: #555; text-align: center; font-style: italic; font-size: 0.9rem;">
-        "I have a very important question..."
-      </p>
+    <div class="page-half">
+      <h2 style="color: #ff4d6d;">Hi!</h2>
       <img src="https://gifdb.com/images/high/beating-heart-cute-bunny-hug-3n93ptp7obb6tatv.gif" alt="bunny">
     </div>
 
     <div class="page-half" id="rightPage">
       <div id="rightPageContent">
-        
         <div id="questionSection" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
           <h1>Will you be my Valentine? 💖</h1>
           <img src="https://ih1.redbubble.net/image.1094756177.1140/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="uwu">
           <button id="yesBtn" onclick="showSuccess()">Yes 💕</button>
-          <button id="noBtn" onmouseenter="moveNo()" onclick="moveNo()" ontouchstart="moveNo()">No 😢</button>
+          <button id="noBtn" onmouseenter="moveNo()" ontouchstart="moveNo()">No 😢</button>
         </div>
 
         <div id="successSection" class="hidden" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
           <h1>Yay! 💘</h1>
-          <textarea id="replyBox" rows="3" placeholder="Write a reply..."></textarea>
-          <button class="send-reply-btn" id="sendReply" onclick="sendReply()">Send Message ✨</button>
-          <img src="https://media.tenor.com/tXypRriFDUkAAAAm/cute-bunny-rabbit.webp" alt="happy bunny" style="width: 100px; margin-top: 20px;">
+          <textarea id="replyBox" rows="2" placeholder="Say something..."></textarea>
+          <button class="send-reply-btn" id="sendReply" onclick="sendReply()">Send ✨</button>
         </div>
-
       </div>
     </div>
   </div>
@@ -231,44 +175,45 @@
     function openBook() { booklet.classList.add('open'); }
 
     function showSuccess() {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       document.getElementById('questionSection').classList.add('hidden');
       document.getElementById('successSection').classList.remove('hidden');
-
-      fetch(webhookURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: "🚨 **SHE SAID YES!** 🚨" })
-      });
+      fetch(webhookURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: "🚨 **YES!**" })});
     }
 
     function sendReply() {
-      const replyText = document.getElementById('replyBox').value;
-      if (!replyText.trim()) return;
-      
-      document.getElementById('sendReply').innerText = "Sending...";
-      
-      fetch(webhookURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: `💌 **Reply:** "${replyText}"` })
-      }).then(() => {
-          document.getElementById('sendReply').innerText = "Sent! ❤️";
-          alert("Message sent!");
-      });
+      const text = document.getElementById('replyBox').value;
+      if (!text.trim()) return;
+      fetch(webhookURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: `💌 **Reply:** ${text}` })})
+      .then(() => { alert("Sent!"); });
     }
 
     function moveNo() {
-      const maxX = rightPage.clientWidth - noBtn.offsetWidth - 20; 
-      const maxY = rightPage.clientHeight - noBtn.offsetHeight - 80; // Extra bottom space for Yes btn
-      
-      let randomX = Math.floor(Math.random() * maxX);
-      let randomY = Math.floor(Math.random() * maxY);
+      const maxX = rightPage.clientWidth - noBtn.offsetWidth - 20;
+      const maxY = rightPage.clientHeight - noBtn.offsetHeight - 20;
+
+      let newX, newY;
+      let isOverlapping = true;
+
+      // Keep calculating a new position until it's away from the "Yes" button (bottom-left)
+      while (isOverlapping) {
+        newX = Math.floor(Math.random() * maxX);
+        newY = Math.floor(Math.random() * maxY);
+
+        // "Yes" button occupies roughly the area from X:0-120 and Y:bottom-100
+        // If the new position is outside that box, we are safe.
+        const inSafeX = newX > 130; 
+        const inSafeY = newY < (rightPage.clientHeight - 130);
+
+        if (inSafeX || inSafeY) {
+          isOverlapping = false;
+        }
+      }
 
       noBtn.style.right = "auto";
       noBtn.style.bottom = "auto";
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
     }
   </script>
 </body>
