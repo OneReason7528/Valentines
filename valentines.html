@@ -6,6 +6,8 @@
   <title>Valentine Booklet</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    /* ... (Keeping your existing CSS from the previous response) ... */
+    
     body {
       display: flex;
       justify-content: center;
@@ -25,7 +27,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Booklet Styling */
     .booklet {
       width: 350px;
       height: 480px;
@@ -38,11 +39,8 @@
       perspective: 1500px;
     }
 
-    .booklet.open {
-      width: 700px;
-    }
+    .booklet.open { width: 700px; }
 
-    /* Spine Shadow */
     .booklet::after {
       content: "";
       position: absolute;
@@ -70,7 +68,6 @@
       border-radius: 0 15px 15px 0;
     }
 
-    /* APPEALING COVER DESIGN */
     .cover-overlay {
       position: absolute;
       top: 0;
@@ -94,26 +91,8 @@
       box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
     }
 
-    .booklet.open .cover-overlay {
-      transform: rotateY(-180deg);
-      opacity: 0; 
-      pointer-events: none;
-    }
+    .booklet.open .cover-overlay { transform: rotateY(-180deg); opacity: 0; pointer-events: none; }
 
-    .cover-overlay h1 {
-      font-size: 36px;
-      margin: 0;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    }
-
-    .cover-overlay .subtext {
-      margin-top: 15px;
-      font-style: italic;
-      font-size: 18px;
-      opacity: 0.9;
-    }
-
-    /* INSIDE CONTENT */
     #rightPageContent {
       opacity: 0;
       pointer-events: none;
@@ -126,50 +105,48 @@
       align-items: center;
     }
 
-    .booklet.open #rightPageContent {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .booklet.open #rightPageContent { opacity: 1; pointer-events: auto; }
 
     h1 { font-size: 24px; color: #ff4d6d; text-align: center; }
-    img { width: 170px; border-radius: 15px; margin: 15px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+    img { width: 150px; border-radius: 15px; margin: 10px 0; }
     .hidden { display: none !important; }
 
-    /* BUTTONS */
     button {
-      padding: 12px 28px;
-      font-size: 18px;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      font-family: 'Segoe UI', sans-serif;
       font-weight: bold;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: transform 0.2s;
     }
 
-    button:active { transform: scale(0.9); }
+    #yesBtn { background: #ff4d6d; color: white; position: absolute; bottom: 30px; left: 30px; z-index: 200; }
+    #noBtn { background: #fdfdfd; color: #999; position: absolute; bottom: 30px; right: 30px; z-index: 200; transition: all 0.15s ease; }
 
-    #yesBtn {
+    /* --- NEW REPLY STYLING --- */
+    #replyBox {
+      width: 90%;
+      padding: 10px;
+      border: 2px solid #ffd6e8;
+      border-radius: 10px;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 10px;
+      resize: none;
+      outline: none;
+    }
+    
+    #replyBox:focus { border-color: #ff4d6d; }
+
+    .send-reply-btn {
       background: #ff4d6d;
       color: white;
-      position: absolute;
-      bottom: 30px;
-      left: 30px;
-      z-index: 200;
+      margin-top: 10px;
+      font-size: 14px;
     }
 
-    #noBtn {
-      background: #fdfdfd;
-      color: #999;
-      position: absolute;
-      bottom: 30px;
-      right: 30px;
-      z-index: 200;
-      transition: all 0.15s ease;
-    }
-
-    .close-btn { background: #eee; color: #666; margin-top: 20px; }
+    .success-msg { color: #555; font-size: 14px; margin-top: 5px; }
 
   </style>
 </head>
@@ -180,12 +157,12 @@
     <div class="cover-overlay" onclick="openBook()">
       <h1>For You</h1>
       <div style="font-size: 60px; margin: 20px 0;">💌</div>
-      <p class="subtext">Tap to open</p>
+      <p>Tap to reveal my secret...</p>
     </div>
 
     <div class="page-half" style="border-right: 1px solid #f0f0f0; border-radius: 15px 0 0 15px;">
       <h2 style="color: #ff4d6d; margin-top: 40px;">Dear Crush,</h2>
-      <p style="color: #555; text-align: center; font-style: italic; line-height: 1.6; padding: 0 10px;">
+      <p style="color: #555; text-align: center; font-style: italic; line-height: 1.6;">
         "I've been wanting to ask you this for a while now..."
       </p>
       <img src="https://gifdb.com/images/high/beating-heart-cute-bunny-hug-3n93ptp7obb6tatv.gif" alt="bunny">
@@ -197,72 +174,82 @@
         <div id="questionSection" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
           <h1>Will you be my Valentine? 💖</h1>
           <img src="https://ih1.redbubble.net/image.1094756177.1140/st,small,507x507-pad,600x600,f8f8f8.jpg" alt="uwu">
-          
           <button id="yesBtn" onclick="showSuccess()">Yes 💕</button>
           <button id="noBtn" onmouseenter="moveNo()" onclick="moveNo()">No 😢</button>
         </div>
 
-        <div id="successSection" class="hidden" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <div id="successSection" class="hidden" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
           <h1>Yey! I'm so happy! 💘</h1>
-          <img src="https://media.tenor.com/tXypRriFDUkAAAAm/cute-bunny-rabbit.webp" alt="happy bunny">
-          <br>
-          <button class="close-btn" onclick="closeBook()">Close Booklet</button>
+          <p class="success-msg">Do you have a message for me?</p>
+          
+          <textarea id="replyBox" rows="3" placeholder="Type your reply here..."></textarea>
+          <button class="send-reply-btn" id="sendReply" onclick="sendReply()">Send Message ✨</button>
+          
+          <img src="https://media.tenor.com/tXypRriFDUkAAAAm/cute-bunny-rabbit.webp" alt="happy bunny" style="width: 100px;">
         </div>
 
       </div>
     </div>
-
   </div>
 
   <script>
     const booklet = document.getElementById('booklet');
     const noBtn = document.getElementById('noBtn');
     const rightPage = document.getElementById('rightPage');
+    const webhookURL = "https://discord.com/api/webhooks/1469371672728440915/OBTyCThzWa-iiGoHxigTi4qoyWj6gqhdty4-sLnlADDVganAp64bQ4_gPtK0QOwr4IXO";
 
-    function openBook() {
-      booklet.classList.add('open');
-    }
-
-    function closeBook() {
-      booklet.classList.remove('open');
-      setTimeout(() => {
-        document.getElementById('questionSection').classList.remove('hidden');
-        document.getElementById('successSection').classList.add('hidden');
-        resetNo();
-      }, 700);
-    }
+    function openBook() { booklet.classList.add('open'); }
 
     function showSuccess() {
-      // 1. Confetti Explosion!
+      // Confetti logic
       var duration = 5 * 1000;
       var animationEnd = Date.now() + duration;
-      var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-      function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-      }
-
       var interval = setInterval(function() {
         var timeLeft = animationEnd - Date.now();
         if (timeLeft <= 0) return clearInterval(interval);
-        var particleCount = 50 * (timeLeft / duration);
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        confetti({ particleCount: 40, spread: 70, origin: { y: 0.6 }, colors: ['#ff4d6d', '#ffffff', '#ffd6e8'] });
       }, 250);
 
-      // 2. Visual Change
       document.getElementById('questionSection').classList.add('hidden');
       document.getElementById('successSection').classList.remove('hidden');
 
-      // 3. Discord Webhook
-      const webhookURL = "https://discord.com/api/webhooks/1469371672728440915/OBTyCThzWa-iiGoHxigTi4qoyWj6gqhdty4-sLnlADDVganAp64bQ4_gPtK0QOwr4IXO";
+      // Send initial "Yes" notification
       fetch(webhookURL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
               username: "Valentine Bot",
-              content: "🚨 **UPDATE:** She clicked YES! 💖🥂"
+              content: "🚨 **SHE SAID YES!** 🚨"
           })
+      });
+    }
+
+    // NEW: Function to send her typed reply
+    function sendReply() {
+      const replyText = document.getElementById('replyBox').value;
+      const sendBtn = document.getElementById('sendReply');
+
+      if (!replyText.trim()) return alert("Please type a message first! ❤️");
+
+      sendBtn.innerText = "Sending...";
+      sendBtn.disabled = true;
+
+      fetch(webhookURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              username: "Valentine Bot",
+              content: `💌 **New Message from her:**\n> "${replyText}"`
+          })
+      })
+      .then(() => {
+          sendBtn.innerText = "Sent! ❤️";
+          document.getElementById('replyBox').value = "";
+          alert("Your message has been sent to him! ✨");
+      })
+      .catch(() => {
+          sendBtn.innerText = "Error! Try again.";
+          sendBtn.disabled = false;
       });
     }
 
@@ -270,24 +257,13 @@
       const padding = 40;
       const maxX = rightPage.clientWidth - noBtn.offsetWidth - padding; 
       const maxY = rightPage.clientHeight - noBtn.offsetHeight - padding;
-
       let randomX, randomY;
       do {
         randomX = Math.floor(Math.random() * maxX);
         randomY = Math.floor(Math.random() * maxY);
       } while (randomX < 150 && randomY > (rightPage.clientHeight - 130));
-
-      noBtn.style.right = "auto";
-      noBtn.style.bottom = "auto";
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
-    }
-
-    function resetNo() {
-      noBtn.style.left = "";
-      noBtn.style.top = "";
-      noBtn.style.right = "30px";
-      noBtn.style.bottom = "30px";
+      noBtn.style.right = "auto"; noBtn.style.bottom = "auto";
+      noBtn.style.left = randomX + "px"; noBtn.style.top = randomY + "px";
     }
   </script>
 </body>
